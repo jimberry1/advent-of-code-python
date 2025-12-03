@@ -32,21 +32,22 @@ def _fetch_input(day_number: int, year: int):
         print(f"failed to fetch puzzle input for day {day_number} year {year}... {e}")
 
 
-def load_line_strings(day_number: int):
+def load_lines(day_number: int):
     with open(_get_input_file_name(day_number), "r") as f:
         return [line.strip() for line in f]
 
 
-def load_line_items(day_number: int, *, item_xf: Callable[[str], Any] | None = None):
+def load_lines_as_lists(
+    day_number: int, *, item_xf: Callable[[str], Any] | None = None
+):
     with open(_get_input_file_name(day_number), "r") as f:
         return [
-            char if not item_xf else item_xf(char)
+            [char if not item_xf else item_xf(char) for char in line.strip()]
             for line in f
-            for char in line.strip()
         ]
 
 
-def load_line_groups(
+def load_line_as_list(
     day_number: int,
     *,
     split_on: str | None = None,
