@@ -1,0 +1,10 @@
+[project]
+name = "advent-of-code-python"
+version = "0.1.0"
+description = "A repository for my submissions of advent of code"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ipython>=9.8.0",
+    "requests>=2.32.5",
+]
