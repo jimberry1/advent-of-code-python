@@ -9,6 +9,10 @@ def _get_input_path(day_number: int, year: int = 2025):
     return Path(f"resources/aoc_inputs/{year}/input_{day_number}.txt")
 
 
+def _get_example_path(day_number: int, year: int = 2025):
+    return Path(f"resources/aoc_inputs/{year}/example_{day_number}.txt")
+
+
 def _fetch_input(day_number: int, year: int):
     print(f"fetching puzzle input for day {day_number} year {year}")
     headers = {"Cookie": f"session={os.getenv('AOC_SESSION')}"}
@@ -24,7 +28,14 @@ def _fetch_input(day_number: int, year: int):
         print(f"failed to fetch puzzle input for day {day_number} year {year}... {e}")
 
 
-def get_input_file(day_number: int, year: int = 2025):
+def get_input_file(day_number: int, year: int = 2025, *, is_example: bool = False):
+    """Returns the pathlib.Path to the input file.
+
+    Options:
+    `is_example` - controls whether to load the example provided in the advent of code description. This should be manually copied in by the user"""
+    if is_example:
+        return _get_example_path(day_number, year)
+
     file_path = _get_input_path(day_number, year)
     if not file_path.exists():
         file_path.parent.mkdir(parents=True, exist_ok=True)
@@ -32,15 +43,19 @@ def get_input_file(day_number: int, year: int = 2025):
     return file_path
 
 
-def load_lines(day_number: int, year: int = 2025):
-    with open(get_input_file(day_number), "r") as f:
+def load_lines(day_number: int, year: int = 2025, *, is_example: bool = False):
+    with open(get_input_file(day_number, year, is_example=is_example), "r") as f:
         return [line.strip() for line in f]
 
 
 def load_lines_as_lists(
-    day_number: int, year: int = 2025, *, item_xf: Callable[[str], Any] | None = None
+    day_number: int,
+    year: int = 2025,
+    *,
+    item_xf: Callable[[str], Any] | None = None,
+    is_example: bool = False,
 ):
-    with open(get_input_file(day_number), "r") as f:
+    with open(get_input_file(day_number, year, is_example=is_example), "r") as f:
         return [
             [char if not item_xf else item_xf(char) for char in line.strip()]
             for line in f
@@ -52,8 +67,9 @@ def load_line_as_list(
     *,
     split_on: str | None = None,
     item_xf: Callable[[str], Any] | None = None,
+    is_example: bool = False,
 ):
-    with open(get_input_file(day_number), "r") as f:
+    with open(get_input_file(day_number, is_example=is_example), "r") as f:
         line = f.readline().strip()
         groups = line.split(split_on) if split_on else [line]
         return groups if not item_xf else [item_xf(group) for group in groups]
