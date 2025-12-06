@@ -62,6 +62,11 @@ def load_lines_as_lists(
         ]
 
 
+def read_raw_lines(day_number, year: int = 2025, *, is_example: bool = False):
+    with open(get_input_file(day_number, year, is_example=is_example), "r") as f:
+        return [line for line in f]
+
+
 def load_line_as_list(
     day_number: int,
     *,
