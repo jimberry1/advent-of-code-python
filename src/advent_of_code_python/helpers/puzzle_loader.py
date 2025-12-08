@@ -43,9 +43,16 @@ def get_input_file(day_number: int, year: int = 2025, *, is_example: bool = Fals
     return file_path
 
 
-def load_lines(day_number: int, year: int = 2025, *, is_example: bool = False):
+def load_lines(
+    day_number: int,
+    year: int = 2025,
+    *,
+    line_xf: Callable[[str], any] = None,
+    is_example: bool = False,
+):
     with open(get_input_file(day_number, year, is_example=is_example), "r") as f:
-        return [line.strip() for line in f]
+        lines = [line.strip() for line in f]
+        return [line_xf(line) for line in lines] if line_xf else lines
 
 
 def load_lines_as_lists(
